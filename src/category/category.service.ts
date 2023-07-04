@@ -12,4 +12,13 @@ export class CategoryService {
         const createdCategory = new this.categoryModel(category);
         return createdCategory.save();
     }
+    async find(): Promise<Category[]> {
+        return await this.categoryModel.find({}, {}, {sort: {_id: -1}})
+    }
+    async findById(id: string): Promise<Category> {
+        return await this.categoryModel.findById(id)
+    }
+    async findByName(name: string): Promise<Category> {
+        return await this.categoryModel.findOne({name})
+    }
 }
