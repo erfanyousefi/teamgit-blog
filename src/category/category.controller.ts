@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CreateCategory } from "./dto/create.dto";
 import { Category } from "./schema/category.schema";
 import { ApiConsumes, ApiParam, ApiTags } from "@nestjs/swagger";
+import { UpdateCategory } from "./dto/update.dto";
 
 @ApiTags("Category")
 @Controller("category")
@@ -27,5 +28,19 @@ export class CategoryController {
     @ApiParam({name: "id", type: "string"})
     async findById(@Param("id") id: string): Promise<Category> {
         return this.categoryService.findById(id);
+    }
+    @Delete("/:id")
+    @ApiParam({name: "id", type: "string"})
+    async deleteById(@Param("id") id: string) {
+        await this.categoryService.deleteById(id);
+        return {
+            message: "category deleted successfully"
+        }
+    }
+    @Put("/:id")
+    @ApiParam({name: "id", type: "string"})
+    @ApiConsumes("application/x-www-form-urlencoded")
+    async update(@Param("id") id: string, @Body() category: UpdateCategory) {
+        return await this.categoryService.update(id, category);
     }
 }
