@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CreateCategory } from "./dto/create.dto";
 import { Category } from "./schema/category.schema";
@@ -27,5 +27,13 @@ export class CategoryController {
     @ApiParam({name: "id", type: "string"})
     async findById(@Param("id") id: string): Promise<Category> {
         return this.categoryService.findById(id);
+    }
+    @Delete("/:id")
+    @ApiParam({name: "id", type: "string"})
+    async deleteById(@Param("id") id: string) {
+        await this.categoryService.deleteById(id);
+        return {
+            message: "category deleted successfully"
+        }
     }
 }
