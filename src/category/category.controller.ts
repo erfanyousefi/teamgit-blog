@@ -21,7 +21,7 @@ export class CategoryController {
     @Get("/by-name/:name")
     @ApiParam({name: "name", type: "string"})
     async findByName(@Param("name") name: string): Promise<Category> {
-        return this.categoryService.findByName(name);
+        return this.categoryService.findByName(id);
     }
     @Get("/by-id/:id")
     @ApiParam({name: "id", type: "string"})
