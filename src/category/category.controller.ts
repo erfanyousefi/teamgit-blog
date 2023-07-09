@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CreateCategory } from "./dto/create.dto";
-import { Category } from "./schema/category.schema";
+import { Category, CategoryDocument } from "./schema/category.schema";
 import { ApiConsumes, ApiParam, ApiTags } from "@nestjs/swagger";
 import { UpdateCategory } from "./dto/update.dto";
 
@@ -26,7 +26,7 @@ export class CategoryController {
     }
     @Get("/by-id/:id")
     @ApiParam({name: "id", type: "string"})
-    async findById(@Param("id") id: string): Promise<Category> {
+    async findById(@Param("id") id: string): Promise<CategoryDocument> {
         return this.categoryService.findById(id);
     }
     @Delete("/:id")

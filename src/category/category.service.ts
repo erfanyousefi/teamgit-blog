@@ -16,7 +16,7 @@ export class CategoryService {
     async find(): Promise<Category[]> {
         return await this.categoryModel.find({}, {}, {sort: {_id: -1}})
     }
-    async findById(id: string): Promise<Category> {
+    async findById(id: string): Promise<CategoryDocument> {
         return await this.categoryModel.findById(id)
     }
     async findByName(name: string): Promise<Category> {
