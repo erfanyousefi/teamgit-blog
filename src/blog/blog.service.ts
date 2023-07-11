@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Blog, BlogDocument } from "./schema/blog.schema";
-import { Model, Types } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { CategoryService } from "src/category/category.service";
 import { InjectModel } from "@nestjs/mongoose";
 import { CreateBlogDto } from "./dto/create.dto";
@@ -23,5 +23,53 @@ export class BlogService {
           category: new Types.ObjectId(category._id)
         });
         return newBlog
+      }
+      async find() {
+        const blogs = await this.blogModel.aggregate([
+          {
+            $lookup: {
+              from: "categories",
+              foreignField: "_id",
+              localField: "category",
+              as: "category"
+            }
+          },
+          {
+            $unwind: "$category"
+          },
+          {
+            $addFields: {
+              category: "$category.name"
+            }
+          }
+        ]);
+        return blogs
+      }
+      async findById(id: string) {
+        const [blog] = await this.blogModel.aggregate([
+          {
+            $match: {
+              _id: new mongoose.Types.ObjectId(id)
+            }
+          },
+          {
+            $lookup: {
+              from: "categories",
+              foreignField: "_id",
+              localField: "category",
+              as: "category"
+            }
+          },
+          {
+            $unwind: "$category"
+          },
+          {
+            $addFields: {
+              category: "$category.name"
+            }
+          }
+        ]);
+        if(!blog) throw new NotFoundException("Blog not found!")
+        return blog
       }
 }

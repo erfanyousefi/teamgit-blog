@@ -1,5 +1,5 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseInterceptors } from "@nestjs/common";
-import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseInterceptors } from "@nestjs/common";
+import { ApiConsumes, ApiParam, ApiTags } from "@nestjs/swagger";
 import { BlogService } from "./blog.service";
 import { CreateBlogDto } from "./dto/create.dto";
 import { MulterFile } from "src/common/types/public";
@@ -24,5 +24,19 @@ export class BlogController {
       statusCode: HttpStatus.CREATED,
       message: "created blog successfully"
     };
+  }
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async find(){
+    const blogs = await this.blogService.find()
+    return blogs
+  }
+
+  @Get("/:id")
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({name: "id", type: "string"})
+  async findById(@Param("id") id: string){
+    const blog = await this.blogService.findById(id)
+    return blog
   }
 }
