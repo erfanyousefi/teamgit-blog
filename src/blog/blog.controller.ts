@@ -53,6 +53,9 @@ export class BlogController {
   @Delete(':id')
   @ApiParam({ name: "id", type: "string" })
   async delete(@Param('id') id: string): Promise<any> {
-    return await this.blogService.delete(id);
+    await this.blogService.delete(id);
+    return {
+      message: "deleted successfully"
+    }
   }
 }
